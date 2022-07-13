@@ -1,0 +1,36 @@
+{
+  "name": "alexa-customer-review-app",
+  "version": "1.0.0",
+  "description": "Application to view and create customer reviews for Alexa",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "start-dev": "nodemon app.js",
+    "test": "jest --config ./jest.config.js  --forceExit --silent",
+    "test-coverage": "jest --config ./jest.config.js  --forceExit --silent --coverage",
+    "lint-fix":"eslint --fix ./*.js"
+  },
+  "keywords": [
+    "Alexa",
+    "reviews"
+  ],
+  "author": "Eunice Amirtharajan",
+  "license": "ISC",
+  "dependencies": {
+    "@shelf/jest-mongodb": "^3.0.2",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.3",
+    "dotenv": "^16.0.1",
+    "eslint-config-prettier": "^8.5.0",
+    "express": "^4.18.1",
+    "jest": "^28.1.2",
+    "moment": "^2.29.4",
+    "mongoose": "^6.4.4",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.19.0"
+  }
+}
