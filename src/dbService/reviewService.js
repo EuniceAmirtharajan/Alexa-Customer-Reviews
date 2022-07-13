@@ -17,10 +17,10 @@ async function readReviews(dbQuery) {
             let dateValue = dayjs(dbQuery['reviewed_date']).date()
             let endDate = dayjs(startDate).set('date', dateValue + 1).toISOString();
             logger.debug(`startDate - ${startDate} and endDate- ${endDate}`)
-            reviews = await Review.find({ 'reviewed_date': { $lt: endDate, $gt: startDate } });
+            reviews = await Review.find({ 'reviewed_date': { $lt: endDate, $gte: startDate } });
         }
         else {
-            logger.info('Entering readReviews date criteria')
+            logger.info('Entering readReviews non-date criteria')
             delete dbQuery['isDateCriteria']
             reviews = await Review.find(dbQuery);
         }

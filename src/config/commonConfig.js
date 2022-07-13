@@ -4,5 +4,7 @@ module.exports={
     CONNECTION_URL: 'mongodb://localhost:27017/',
     DATABASE_NAME: 'AlexaCustomerReviews',
     COLLECTION_NAME: 'reviews',
-    NODE_ENV: 'dev'
+    NODE_ENV: 'dev',
+    COLLECTION_NAME_TEST: 'test_reviews',
+    DATABASE_NAME_TEST: 'AlexaCustomerReviews'
 }

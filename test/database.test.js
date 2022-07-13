@@ -6,6 +6,9 @@ const mongoose = require('mongoose');
 const reviewSchema = require('./data/reviewSchema')
 const Review = require('../src/model/review');
 const valid_ratings= require('../src/util/constants').valid_ratings
+const testDBUrl = require('../src/config/commonConfig').CONNECTION_URL
+const testDBName = require('../src/config/commonConfig').DATABASE_NAME_TEST
+const testCollectionName= require('../src/config/commonConfig').COLLECTION_NAME_TEST
 
 describe('create and read reviews', () => {
     let db;
@@ -17,9 +20,9 @@ describe('create and read reviews', () => {
     };
     const reviews = reviewSchema;
     beforeAll(async () => {
-        await mongoose.connect('mongodb://localhost:27017/test_' + 'AlexaCustomerReviews', { useNewUrlParser: true, useUnifiedTopology: true });
+        await mongoose.connect(testDBUrl + testDBName, { useNewUrlParser: true, useUnifiedTopology: true });
         db = mongoose.connection;
-        const collection = 'test_reviews';
+        const collection = testCollectionName;
         const existingCollections = await db.db.listCollections().toArray();
         if (existingCollections.length === 0) {
             await db.createCollection(collection);
@@ -32,9 +35,8 @@ describe('create and read reviews', () => {
         await reviews.deleteMany({})
     })
     afterAll(async () => {
-        const collection = 'test_' + 'reviews';
+        const collection = testCollectionName;
         await mongoose.connection.dropCollection(collection)
-        await mongoose.connection.dropCollection('reviews')
         await mongoose.connection.dropDatabase().then(async () => {
             await mongoose.connection.close();
         })
@@ -44,7 +46,7 @@ describe('create and read reviews', () => {
         expect(dbRes.length).toBeGreaterThan(0)
     })
     it('get reviews with date filter', async () => {
-        const dbRes = await reviews.find({ 'reviewed_date': { $lt: new Date('2017-12-08T00:00:00.000Z'), $gt: new Date('2017-12-07T00:00:00.000Z') } });
+        const dbRes = await reviews.find({ 'reviewed_date': { $lt: new Date('2017-12-08T00:00:00.000Z'), $gte: new Date('2017-12-07T00:00:00.000Z') } });
         expect(dbRes.length).toBeGreaterThan(0)
     })
     it('get reviews with rating filter', async () => {

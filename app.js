@@ -19,7 +19,6 @@ app.use(reviewRoutes);
  */
 app.listen(PORT, async () => {
     logger.info('Server is running on port', PORT)
-    console.log(`Server is running on port ${PORT}.`)
     try {
         logger.info('Trying to connect to the database')
         await dbConfig.connectDBServer();
