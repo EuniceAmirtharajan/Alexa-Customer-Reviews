@@ -5,9 +5,7 @@ const mockReviewData = require('./data/testReviewData.json')
 const mongoose = require('mongoose');
 const reviewSchema = require('./data/reviewSchema')
 const Review = require('../src/model/review');
-const valid_ratings= 
-
-console.log(process.env.COLLECTION_NAME)
+const valid_ratings= require('../src/util/constants').valid_ratings
 
 describe('create and read reviews', () => {
     let db;

@@ -2,7 +2,7 @@ const {
     addMultipleReviews,
     addNewReview
 } = require('../../src/controller/addReviews')
-const addontroller = require('../../src/controller/addReviews');
+const addController = require('../../src/controller/addReviews');
 const reviewData = require('../data/testReviewData.json')
 jest.mock('../../src/controller/addReviews')
 
@@ -19,14 +19,14 @@ describe('addReviews', () => {
             'product_name': 'Amazon Alexa',
             'reviewed_date': '2017-12-09T22:29:32.000Z'
         }
-        jest.spyOn(addontroller, 'addNewReview').mockResolvedValueOnce(reviewToInsert);
+        jest.spyOn(addController, 'addNewReview').mockResolvedValueOnce(reviewToInsert);
         let insertedData = await addNewReview(mReq, mRes);
         expect(insertedData).toEqual(reviewToInsert);
     })
     it('insert reviews in bulk', async () => {
         const mReq = {};
         const mRes = { sendStatus: jest.fn() };
-        jest.spyOn(addontroller, 'addMultipleReviews').mockResolvedValueOnce(reviewData);
+        jest.spyOn(addController, 'addMultipleReviews').mockResolvedValueOnce(reviewData);
         let queriedData = await addMultipleReviews(mReq, mRes);
         expect(queriedData).toEqual(reviewData);
     })

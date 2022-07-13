@@ -1,13 +1,15 @@
-const ValidFilters = Object.freeze({
-    store: 'review_source',
-    date: 'reviewed_date',
-    rating: 'rating'
-});
-
+const ValidFilters = require('./constants').valid_filters
+const logger = require('../util/logger')
+/**
+ * Utility to fetch the queries from request path
+ * @param {*} req 
+ * @returns 
+ */
 function fetchPathQueries(req) {
+    logger.info('Entering fetchPathQueries')
     let isDateCriteria = false;
     let dbQuery = {};
-    console.log(req)
+    logger.debug('Input for fetchPathQueries',req)
     if (Object.keys(req.query).length > 0) {
         for (const [key, value] of Object.entries(req.query)) {
             if (key === 'date') isDateCriteria = true

@@ -6,8 +6,7 @@ var schema = new mongoose.Schema({
     },
     author: {
         type: String,
-        required: true,
-        unique: true
+        default:''
     },
     review_source: {
         type: String,

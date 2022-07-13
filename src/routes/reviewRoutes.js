@@ -2,6 +2,7 @@ const express = require('express');
 const addReview = require('../controller/addReviews.js');
 const searchReview = require('../controller/searchReviews.js');
 const reviewRouter = express.Router();
+const validator=require('../middlewares/validator.middleware')
 
 //route to fetch reviews
 reviewRouter.get('/fetchReviews', (req, res) => {
@@ -20,7 +21,7 @@ reviewRouter.post('/addReview', (req, res) => {
     addReview.addNewReview(req, res)
 });
 //route to bulk insert reviews
-reviewRouter.post('/addAllReviews', (req, res) => {
+reviewRouter.post('/addAllReviews', validator.validate('createReview'), (req, res) => {
     addReview.addMultipleReviews(req, res)
 });
 

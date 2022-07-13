@@ -1,32 +1,34 @@
 const dayjs = require('dayjs');
 const Review = require('../model/review.js');
-const valid_ratings = [1, 2, 3, 4, 5]
+const valid_ratings = require('../util/constants').valid_ratings
+const logger = require('../util/logger');
 /**
  * Fetches reviews based on date or rating or store. If no filters are requested the entire collection will be returned
  * @param {*} dbQuery 
  * @returns 
  */
 async function readReviews(dbQuery) {
+    logger.info('Entering readReviews')
     let reviews = [];
     try {
-        console.log('GET', dbQuery)
+        logger.debug('input for readReviews', dbQuery)
         if (dbQuery['isDateCriteria'] === true) {
             let startDate = dayjs(dbQuery['reviewed_date']).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
             let dateValue = dayjs(dbQuery['reviewed_date']).date()
             let endDate = dayjs(startDate).set('date', dateValue + 1).toISOString();
-            console.log(startDate)
-            console.log(endDate)
+            logger.debug(`startDate - ${startDate} and endDate- ${endDate}`)
             reviews = await Review.find({ 'reviewed_date': { $lt: endDate, $gt: startDate } });
         }
         else {
-            console.log('inside')
+            logger.info('Entering readReviews date criteria')
             delete dbQuery['isDateCriteria']
             reviews = await Review.find(dbQuery);
         }
         return reviews;
     }
     catch (error) {
-        console.log(error)
+        logger.error('Error in readReviews', error);
+        throw error;
     }
 }
 /**
@@ -35,13 +37,13 @@ async function readReviews(dbQuery) {
  * @returns 
  */
 async function fetchMonthlyAverageRating(dbQuery) {
+    logger.info('Entering fetchMonthlyAverageRating')
     let result = [];
     try {
         let dateValue = dayjs(dbQuery['reviewed_date']).date()
         let endDate = dayjs(dbQuery['reviewed_date']).set('date', dateValue + 1).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
         let startDate = dayjs(endDate).set('date', dateValue - 30).toISOString();
-        console.log(startDate)
-        console.log(endDate)
+        logger.debug(`startDate - ${startDate} and endDate- ${endDate}`)
         result = await Review.aggregate([
             {
                 $match:
@@ -62,12 +64,13 @@ async function fetchMonthlyAverageRating(dbQuery) {
                 }
             }
         ])
-        console.log(result)
+        logger.debug(`result from averageRating query- ${result}`)
         return result;
 
     }
     catch (error) {
-        console.log(error)
+        logger.error('Error in fetchMonthlyAverageRating', error)
+        throw error;
     }
 }
 /**
@@ -76,6 +79,7 @@ async function fetchMonthlyAverageRating(dbQuery) {
  * @returns 
  */
 async function fetchReviewsByRating(dbQuery) {
+    logger.info('Entering fetchReviewsByRating')
     let reviewData = [];
     try {
         reviewData = await Review.aggregate([{
@@ -108,11 +112,12 @@ async function fetchReviewsByRating(dbQuery) {
         if (dbQuery['rating'] != undefined) {
             reviewData = reviewData.filter((review) => review.rating == parseInt(dbQuery['rating']))
         }
-        console.log(reviewData);
+        logger.debug('Response for fetchReviewsByRating', reviewData);
         return reviewData;
     }
     catch (error) {
-        console.log(error)
+        logger.error('Error in fetchReviewsByRating', error)
+        throw error;
     }
 }
 /**
@@ -122,6 +127,7 @@ async function fetchReviewsByRating(dbQuery) {
  * @returns 
  */
 async function addOrUpdateNewReview(filter, update) {
+    logger.info('Entering addOrUpdateNewReview')
     try {
         await Review.countDocuments(filter);
         let doc = await Review.findOneAndUpdate(filter, update, {
@@ -130,7 +136,8 @@ async function addOrUpdateNewReview(filter, update) {
         });
         return doc;
     } catch (error) {
-        console.log(error)
+        logger.error('Error in addOrUpdateNewReview', error)
+        throw error;
     }
 
 }
@@ -139,10 +146,12 @@ async function addOrUpdateNewReview(filter, update) {
  * @param {*} reviewData 
  */
 async function bulkInsertReviews(reviewData) {
+    logger.info('Entering bulkInsertReviews')
     try {
         await Review.insertMany(reviewData);
     } catch (error) {
-        console.log(error)
+        logger.error('Error in bulkInsertReviews', error)
+        throw error;
     }
 }
 module.exports = { readReviews, fetchMonthlyAverageRating, fetchReviewsByRating, addOrUpdateNewReview, bulkInsertReviews }

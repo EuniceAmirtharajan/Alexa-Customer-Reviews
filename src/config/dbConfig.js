@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const CONNECTION_URL = process.env.CONNECTION_URL
-const DATABASE_NAME = process.env.DATABASE_NAME
+const CONNECTION_URL = require('../config/commonConfig').CONNECTION_URL;
+const DATABASE_NAME =  require('../config/commonConfig').DATABASE_NAME;
 mongoose.Promise = global.Promise;
 
 function connectDBServer() {

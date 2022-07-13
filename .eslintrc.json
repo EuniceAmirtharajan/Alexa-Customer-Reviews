@@ -8,12 +8,7 @@
     "parserOptions": {
         "ecmaVersion": "latest"
     },
-    "rules": {
-        "quotes": [
-            "warn",
-            "single"
-        ]
-    },
+    "rules": {},
     "overrides": [
         {
           "files": [
